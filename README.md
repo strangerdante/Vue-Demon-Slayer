@@ -1,13 +1,19 @@
 
 # Prueba tecnica vue.js
 
-Maquetacion prueba en Vue.js, Tailwind CSS.
+Maquetacion en Vue.js, Tailwind CSS.
 
 
 
-## Authors
+## Autor
 
 - [@Jamel Pimienta]
+
+## Pagina online
+
+Version online desplegada en **Netlify**,  [Click aqui](https://vue-demon-slayer.netlify.app)
+
+> https://vue-demon-slayer.netlify.app
 
 
 ## Running Tests
