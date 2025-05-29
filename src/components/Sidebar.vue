@@ -1,92 +1,221 @@
 <template>
-   <div class="h-screen bg-black">
-     <button @click="toggleSidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg  hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-       <span class="sr-only">Open sidebar</span>
-       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-         <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-       </svg>
-     </button>
- 
-     <aside @click="toggleSidebar" id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform" aria-label="Sidebar" :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
-    <div class="h-full px-3 py-2 overflow-y-auto bg-morado-oscuro dark:morado-oscuro">
-       <ul class="space-y-2 font-medium">
-          <li class="mb-6 flex items-center font-bold text-lg">
-          <img src="../assets/logo.png" alt="Logo" class="mr-4">
-          <h1 class="text-white ">anime<span class="text-morado-electrico">yabu.</span></h1>
-          </li>
- 
-          <li>
-             <span class="ml-2 text-white font-bold">Categorias</span>
-          </li>
-          <li>
-             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-rosa-brillante dark:hover:bg-rosa-brillante">
-                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Ver todas</span>
-                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-white bg-morado-electrico rounded-full">3</span>
-             </a>
-          </li>
-          <li>
-             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-rosa-brillante dark:hover:bg-rosa-brillante">
-                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path><path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path></svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Crear</span>
-             </a>
-          </li>
- 
-          <li>
-             <router-link to="/" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-rosa-brillante dark:hover:bg-rosa-brillante">
-                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-white group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path></svg>
-                <span class="flex-1 ml-3 whitespace-nowrap font-bold">Cerrar sesion</span>
-             </router-link>
-          </li>
-       </ul>
-    </div>
-     </aside>
- 
- <div class="p-4 sm:ml-64">
-    <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-       <div class="grid grid-cols-3 gap-4 mb-4">
-          <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-morado-oscuro hover:bg-rosa-brillante">
-             <p class="text-sm md:text-2xl text-gray-400 dark:text-white">ACCION</p>
+  <div
+    class="h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
+  >
+    <!-- Botón toggle del sidebar -->
+    <button
+      @click="toggleSidebar"
+      type="button"
+      class="fixed top-6 left-6 z-50 inline-flex items-center justify-center w-12 h-12 text-white bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400/50 transition-all duration-300 shadow-lg"
+      :class="{ 'opacity-0 pointer-events-none': sidebarOpen }"
+    >
+      <span class="sr-only">Open sidebar</span>
+      <i class="fas fa-bars text-base"></i>
+    </button>
+
+    <!-- Overlay para cerrar sidebar en móvil -->
+    <div
+      v-if="sidebarOpen"
+      class="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 lg:hidden"
+      @click="toggleSidebar"
+    ></div>
+
+    <!-- Sidebar -->
+    <aside
+      id="default-sidebar"
+      class="fixed top-0 left-0 z-40 w-2/3 lg:w-80 h-screen transition-all duration-300 ease-in-out transform"
+      :class="{
+        '-translate-x-full': !sidebarOpen,
+        'translate-x-0': sidebarOpen,
+      }"
+    >
+      <div
+        class="h-full bg-gradient-to-b from-slate-800/95 to-purple-900/95 backdrop-blur-xl border-r border-white/10 shadow-2xl"
+      >
+        <div class="h-full px-4 sm:px-6 py-6 overflow-y-auto custom-scrollbar">
+          <!-- Header del sidebar -->
+          <div class="mb-8 flex items-center justify-between">
+            <div class="flex items-center">
+              <div
+                class="w-10 h-10 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center mr-4 shadow-lg"
+              >
+                <i class="fas fa-play text-white text-sm"></i>
+              </div>
+              <h1 class="text-white font-bold text-xl">
+                anime<span
+                  class="text-transparent bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text"
+                  >admin</span
+                >
+              </h1>
+            </div>
+            <button
+              @click="toggleSidebar"
+              type="button"
+              class="inline-flex items-center justify-center w-8 h-8 text-white/70 hover:text-white hover:bg-white/10 focus:outline-none rounded-lg transition-all duration-200"
+            >
+              <i class="fas fa-times text-base"></i>
+              <span class="sr-only">Cerrar sidebar</span>
+            </button>
           </div>
-          <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-morado-oscuro  hover:bg-rosa-brillante">
-             <p class="text-sm md:text-2xl text-gray-400 dark:text-white">AVENTURA</p>
-          </div>
-          <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-morado-oscuro  hover:bg-rosa-brillante">
-             <p class="text-sm md:text-2xl text-gray-400 dark:text-white">COMEDIA</p>
-          </div>
-       </div>
-       <div class="grid grid-cols-3 gap-4 mb-4">
-          <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-morado-oscuro  hover:bg-rosa-brillante">
-             <p class="text-sm md:text-2xl text-gray-400 dark:text-white">TERROR</p>
-          </div>
-          <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-morado-oscuro  hover:bg-rosa-brillante">
-             <p class="text-sm md:text-2xl text-gray-400 dark:text-white">ROMANCE</p>
-          </div>
-          <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-morado-oscuro  hover:bg-rosa-brillante">
-             <p class="text-sm md:text-2xl text-gray-400 dark:text-white">MISTERIO</p>
-          </div>
-       </div>
-    </div>
- </div>
-   </div>
- </template>
- 
- <script>
- export default {
-   name: 'Sidebar',
-   data() {
-     return {
-       sidebarOpen: false
-     };
-   },
-   methods: {
-     toggleSidebar() {
-       this.sidebarOpen = !this.sidebarOpen;
-     }
-   }
- };
- </script>
- 
- <style scoped>
- /* Estilos del sidebar */
- </style>
+
+          <!-- Navegación -->
+          <nav class="space-y-6">
+            <!-- Sección Categorías -->
+            <div>
+              <h2
+                class="text-white/70 font-semibold text-sm uppercase tracking-wider mb-4 flex items-center"
+              >
+                <i class="fas fa-layer-group mr-2 text-pink-400"></i>
+                Categorías
+              </h2>
+
+              <ul class="space-y-2">
+                <li>
+                  <a
+                    href="#"
+                    class="group flex items-center p-3 text-white rounded-xl hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-purple-600/20 border border-transparent hover:border-white/10 transition-all duration-300 transform hover:scale-[1.02]"
+                  >
+                    <div
+                      class="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200"
+                    >
+                      <i class="fas fa-th-large text-white text-sm"></i>
+                    </div>
+                    <span class="flex-1 font-medium">Ver todas</span>
+                    <span
+                      class="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-gradient-to-r from-pink-500 to-purple-600 rounded-full shadow-lg"
+                    >
+                      3
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="group flex items-center p-3 text-white rounded-xl hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-purple-600/20 border border-transparent hover:border-white/10 transition-all duration-300 transform hover:scale-[1.02]"
+                  >
+                    <div
+                      class="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200"
+                    >
+                      <i class="fas fa-plus text-white text-sm"></i>
+                    </div>
+                    <span class="flex-1 font-medium">Crear</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Sección Usuario -->
+            <div>
+              <h2
+                class="text-white/70 font-semibold text-sm uppercase tracking-wider mb-4 flex items-center"
+              >
+                <i class="fas fa-user mr-2 text-purple-400"></i>
+                Usuario
+              </h2>
+
+              <ul class="space-y-2">
+                <li>
+                  <router-link
+                    to="/"
+                    class="group flex items-center p-3 text-white rounded-xl hover:bg-gradient-to-r hover:from-red-500/20 hover:to-pink-600/20 border border-transparent hover:border-white/10 transition-all duration-300 transform hover:scale-[1.02]"
+                  >
+                    <div
+                      class="w-8 h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-200"
+                    >
+                      <i class="fas fa-sign-out-alt text-white text-sm"></i>
+                    </div>
+                    <span class="flex-1 font-medium">Cerrar sesión</span>
+                  </router-link>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <Contenido :sidebarOpen="sidebarOpen" />
+  </div>
+</template>
+
+<script>
+import Contenido from './Contenido.vue';
+
+export default {
+  name: "Sidebar",
+  components: {
+    Contenido
+  },
+  data() {
+    return {
+      sidebarOpen: false,
+    };
+  },
+  mounted() {
+    // Agregar event listener para detectar clics fuera del sidebar
+    document.addEventListener("click", this.handleOutsideClick);
+  },
+  beforeUnmount() {
+    // Remover event listener cuando el componente se desmonta
+    document.removeEventListener("click", this.handleOutsideClick);
+  },
+  methods: {
+    toggleSidebar() {
+      this.sidebarOpen = !this.sidebarOpen;
+    },
+    handleOutsideClick(event) {
+      // Verificar si el sidebar está abierto y si el clic fue fuera del sidebar
+      const sidebar = document.getElementById("default-sidebar");
+      const toggleButton = document.querySelector('button[type="button"]');
+
+      if (
+        this.sidebarOpen &&
+        sidebar &&
+        !sidebar.contains(event.target) &&
+        toggleButton &&
+        !toggleButton.contains(event.target)
+      ) {
+        this.sidebarOpen = false;
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Custom scrollbar para el sidebar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.5);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.7);
+}
+
+/* Animaciones personalizadas */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out;
+}
+</style>
