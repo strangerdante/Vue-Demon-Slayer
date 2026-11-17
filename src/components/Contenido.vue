@@ -1,8 +1,5 @@
 <template>
-  <main
-    class="min-h-screen pt-16 transition-[padding] duration-300"
-    :class="{ 'lg:pr-80': sidebarOpen }"
-  >
+  <main class="min-h-screen pt-16">
     <div class="mx-auto max-w-7xl px-4 pb-16 pt-10 sm:px-6">
       <!-- Encabezado -->
       <header class="mb-8">
@@ -248,9 +245,6 @@ import { FILTROS, conteoPorFiltro, normalizar, personajes } from "../personajes"
 export default {
   name: "Contenido",
   components: { PersonajeDetalle },
-  props: {
-    sidebarOpen: { type: Boolean, default: false },
-  },
   data() {
     return {
       personajes,
@@ -329,11 +323,9 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("filtro-personajes", this.manejarFiltro);
     document.addEventListener("keydown", this.atajoBusqueda);
   },
   beforeUnmount() {
-    window.removeEventListener("filtro-personajes", this.manejarFiltro);
     document.removeEventListener("keydown", this.atajoBusqueda);
   },
   methods: {
@@ -345,11 +337,6 @@ export default {
     cambiarFiltro(filtro) {
       this.filtroActual = filtro;
       this.paginaActual = 1;
-      // Sincronizar con el panel lateral
-      window.dispatchEvent(new CustomEvent("filtro-cambiado", { detail: { filtro } }));
-    },
-    manejarFiltro(event) {
-      this.cambiarFiltro(event.detail.filtro);
     },
     limpiarBusqueda() {
       this.busqueda = "";

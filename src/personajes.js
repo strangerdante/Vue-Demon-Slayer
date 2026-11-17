@@ -2,12 +2,12 @@ import datos from "../personajes_demon_slayer.json";
 
 export const personajes = datos.personajes;
 
-// Filtros disponibles (compartidos por la barra de herramientas y el panel lateral)
+// Filtros disponibles en la barra de herramientas
 export const FILTROS = [
-  { id: "todos", etiqueta: "Todos", etiquetaLarga: "Todos los personajes", punto: "bg-fuji-400", prueba: () => true },
-  { id: "humano", etiqueta: "Humanos", etiquetaLarga: "Humanos", punto: "bg-jade-400", prueba: (p) => p.race === "Humano" },
-  { id: "demonio", etiqueta: "Demonios", etiquetaLarga: "Demonios", punto: "bg-beni-400", prueba: (p) => p.race === "Demonio" },
-  { id: "hashira", etiqueta: "Hashira", etiquetaLarga: "Hashira (Pilares)", punto: "bg-kin-400", prueba: (p) => p.affiliation_id === 2 },
+  { id: "todos", etiqueta: "Todos", punto: "bg-fuji-400", prueba: () => true },
+  { id: "humano", etiqueta: "Humanos", punto: "bg-jade-400", prueba: (p) => p.race === "Humano" },
+  { id: "demonio", etiqueta: "Demonios", punto: "bg-beni-400", prueba: (p) => p.race === "Demonio" },
+  { id: "hashira", etiqueta: "Hashira", punto: "bg-kin-400", prueba: (p) => p.affiliation_id === 2 },
 ];
 
 export const conteoPorFiltro = Object.fromEntries(

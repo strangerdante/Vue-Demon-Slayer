@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import InicioSesion from "./components/InicioSesion.vue";
-import Sidebar from "./components/Sidebar.vue";
+import PaginaPersonajes from "./components/PaginaPersonajes.vue";
 import { obtenerSesion } from "./auth";
 import { personajes } from "./personajes";
 
@@ -14,7 +14,7 @@ const routes = [
   {
     path: "/personajes/:id(\\d+)?",
     name: "personajes",
-    component: Sidebar,
+    component: PaginaPersonajes,
     meta: { titulo: "Personajes", requiereSesion: true },
   },
   // Compatibilidad con la ruta antigua
