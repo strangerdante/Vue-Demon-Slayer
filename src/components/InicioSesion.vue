@@ -1,54 +1,18 @@
 <template>
-  <div class="flex">
-    <div class="w-full lg:w-1/2 h-screen md:bg-gradient-to-t from-black to-morado-electrico bg-black  box-sizing: border-box">
-      
-      <!-- Contenido de la primera parte -->
-      <Login/>
-    <router-view></router-view>
-    </div>
-    <div class="hidden lg:block lg:w-1/2 h-screen bg-morado-oscuro box-sizing: border-box">
-      
-      <!-- Contenido de la segunda parte -->
-      <Carousel/>
-      
-    </div>
+  <div class="grid min-h-screen lg:grid-cols-2">
+    <Login />
+    <aside class="hidden border-l border-tinta-700 bg-tinta-900 lg:block">
+      <Carousel />
+    </aside>
   </div>
-</template>>
+</template>
 
 <script>
-  import Swal from 'sweetalert2'
-  import Carousel from '../components/Carousel.vue';
-  import Login from '../components/Login.vue'; 
-  import Registro from '../components/Registro.vue'; 
-  export default {
-    name:'InicioSesion',
-    components: {
-      Carousel,
-      Login,
-      Registro,
-    },
-    data() {
-      return{
-        mensaje:'Hola como estas'
-      }
-    },
+import Carousel from "./Carousel.vue";
+import Login from "./Login.vue";
 
-    methods: {
-      showAlert() {
-        Swal.fire({
-          title: 'Titulo ventana',
-          text: 'Has hecho exitosamente click en el boton',
-          icon: 'success',
-          confirmButtonText: 'Aceptar'
-        })
-      }
-    }
-
-  }
+export default {
+  name: "InicioSesion",
+  components: { Carousel, Login },
+};
 </script>
-
-<style scoped>
-
-</style>
-
-  

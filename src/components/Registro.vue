@@ -1,184 +1,107 @@
-validarEmail() { const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; return
-emailRegex.test(this.email); },
 <template>
-  <div class="w-full">
-    <!-- Formulario de Registro -->
-    <form class="space-y-4">
-      <!-- Header con logo -->
-      <div class="text-center mb-6">
-        <div class="relative h-40 flex items-center justify-center">
-          <img
-            src="../assets/login.png"
-            alt="logo login"
-            class="mx-auto w-40 sm:w-52 drop-shadow-lg absolute top-1/2 transform -translate-y-1/2"
-          />
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-purple-500/20 to-transparent rounded-full blur-xl"
-          ></div>
+  <div>
+    <img src="../assets/registro.png" alt="" class="mb-8 w-48 sm:w-52" />
+    <h1 class="text-3xl font-extrabold text-washi-50">Crea tu cuenta</h1>
+    <p class="mt-2 text-washi-400">Solo necesitas un usuario y una contraseña.</p>
+
+    <form class="mt-8 space-y-5" novalidate @submit.prevent="registrar">
+      <Transition name="fade">
+        <div v-if="mensaje" class="alert-error" role="status">
+          <i class="fas fa-circle-exclamation mt-0.5" aria-hidden="true"></i>
+          <span>{{ mensaje }}</span>
         </div>
-        <h1 class="text-2xl font-bold text-white mt-4 mb-2">
-          Crear una cuenta
-        </h1>
-      </div>
+      </Transition>
 
-      <!-- Mensaje de éxito/error -->
-      <div
-        v-if="mensaje"
-        :class="mensajeClases"
-        class="p-4 rounded-xl flex items-center"
-      >
-        <i :class="mensajeIcono" class="mr-3"></i>
-        <span>{{ mensaje }}</span>
-      </div>
-
-      <!-- Campo Usuario -->
-      <div class="relative group">
+      <div>
+        <label class="field-label" for="registro-usuario">Nombre de usuario</label>
         <input
-          v-model="usuario"
-          class="w-full bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl py-3 px-4 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-300 peer pt-5"
-          id="usuario"
+          id="registro-usuario"
+          v-model.trim="usuario"
           type="text"
-          placeholder="Usuario"
-          :class="{
-            'border-red-400 focus:ring-red-400': usuario && !validarUsuario,
-          }"
+          autocomplete="username"
+          class="field-input"
+          :class="{ 'is-invalid': errorUsuario }"
+          :aria-invalid="Boolean(errorUsuario)"
         />
-        <label
-          class="absolute text-sm text-white/70 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-pink-400"
-          for="usuario"
-        >
-          <i class="fas fa-user mr-2"></i>Nombre de usuario
-        </label>
-        <div
-          v-if="usuario && !validarUsuario"
-          class="flex items-center mt-2 text-red-400 text-sm"
-        >
-          <i class="fas fa-exclamation-circle mr-2"></i>
-          <span>El nombre de usuario debe tener al menos 3 caracteres</span>
-        </div>
-        <div
-          v-if="usuarioExiste"
-          class="flex items-center mt-2 text-red-400 text-sm"
-        >
-          <i class="fas fa-exclamation-circle mr-2"></i>
-          <span>Este nombre de usuario ya está en uso</span>
-        </div>
-      </div>
-
-      <!-- Campo Contraseña -->
-      <div class="relative group">
-        <input
-          v-model="contrasena"
-          class="w-full bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl py-3 px-4 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-300 peer pt-5"
-          id="password"
-          :type="mostrarContrasena ? 'text' : 'password'"
-          placeholder="contraseña"
-          :class="{
-            'border-red-400 focus:ring-red-400':
-              contrasena && !validarContrasena,
-          }"
-        />
-        <label
-          class="absolute text-sm text-white/70 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-pink-400"
-          for="password"
-        >
-          <i class="fas fa-lock mr-2"></i>Contraseña
-        </label>
-        <button
-          type="button"
-          @click="mostrarContrasena = !mostrarContrasena"
-          class="absolute right-4 top-4 text-white/70 hover:text-white transition-colors"
-        >
-          <i :class="mostrarContrasena ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-        </button>
-        <div
-          v-if="contrasena && !validarContrasena"
-          class="flex items-center mt-2 text-red-400 text-sm"
-        >
-          <i class="fas fa-exclamation-circle mr-2"></i>
-          <span>La contraseña debe tener al menos 6 caracteres</span>
-        </div>
-      </div>
-
-      <!-- Campo Confirmar Contraseña -->
-      <div class="relative group">
-        <input
-          v-model="confirmarContrasena"
-          class="w-full bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl py-3 px-4 text-white placeholder-transparent focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-300 peer pt-5"
-          id="confirm-password"
-          :type="mostrarConfirmarContrasena ? 'text' : 'password'"
-          placeholder="confirmar contraseña"
-          :class="{
-            'border-red-400 focus:ring-red-400':
-              confirmarContrasena && !validarConfirmacion,
-          }"
-        />
-        <label
-          class="absolute text-sm text-white/70 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] left-4 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:text-pink-400"
-          for="confirm-password"
-        >
-          <i class="fas fa-lock mr-2"></i>Confirmar contraseña
-        </label>
-        <button
-          type="button"
-          @click="mostrarConfirmarContrasena = !mostrarConfirmarContrasena"
-          class="absolute right-4 top-4 text-white/70 hover:text-white transition-colors"
-        >
-          <i
-            :class="
-              mostrarConfirmarContrasena ? 'fas fa-eye-slash' : 'fas fa-eye'
-            "
-          ></i>
-        </button>
-        <div
-          v-if="confirmarContrasena && !validarConfirmacion"
-          class="flex items-center mt-2 text-red-400 text-sm"
-        >
-          <i class="fas fa-exclamation-circle mr-2"></i>
-          <span>Las contraseñas no coinciden</span>
-        </div>
-      </div>
-
-      <!-- Botón de registro -->
-      <button
-        @click.prevent="registrar"
-        :disabled="!formularioValido || registrando"
-        class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-4 focus:ring-pink-400/50 transform hover:scale-[1.02] transition-all duration-200 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
-        type="submit"
-      >
-        <i v-if="registrando" class="fas fa-spinner fa-spin mr-2"></i>
-        <i v-else class="fas fa-user-plus mr-2"></i>
-        {{ registrando ? "Creando cuenta..." : "Crear Cuenta" }}
-      </button>
-
-      <!-- Enlace a login -->
-      <div class="text-center pt-6 border-t border-white/20">
-        <p class="text-white/80 text-sm">
-          ¿Ya tienes una cuenta?
-          <button
-            @click="volverLogin"
-            class="text-pink-400 hover:text-pink-300 font-semibold ml-1 transition-colors duration-200"
-            type="button"
-          >
-            Inicia sesión aquí
-          </button>
+        <p v-if="errorUsuario" class="field-error">
+          <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+          {{ errorUsuario }}
         </p>
       </div>
+
+      <div>
+        <label class="field-label" for="registro-password">Contraseña</label>
+        <div class="relative">
+          <input
+            id="registro-password"
+            v-model="contrasena"
+            :type="mostrarContrasena ? 'text' : 'password'"
+            autocomplete="new-password"
+            class="field-input pr-11"
+            :class="{ 'is-invalid': contrasena && !validarContrasena }"
+            :aria-invalid="Boolean(contrasena && !validarContrasena)"
+          />
+          <button
+            type="button"
+            class="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-washi-400 hover:text-washi-50"
+            :aria-label="mostrarContrasena ? 'Ocultar contraseñas' : 'Mostrar contraseñas'"
+            @click="mostrarContrasena = !mostrarContrasena"
+          >
+            <i :class="mostrarContrasena ? 'fas fa-eye-slash' : 'fas fa-eye'" aria-hidden="true"></i>
+          </button>
+        </div>
+        <p v-if="contrasena && !validarContrasena" class="field-error">
+          <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+          Debe tener al menos 6 caracteres.
+        </p>
+      </div>
+
+      <div>
+        <label class="field-label" for="registro-confirmar">Confirmar contraseña</label>
+        <input
+          id="registro-confirmar"
+          v-model="confirmarContrasena"
+          :type="mostrarContrasena ? 'text' : 'password'"
+          autocomplete="new-password"
+          class="field-input"
+          :class="{ 'is-invalid': confirmarContrasena && !validarConfirmacion }"
+          :aria-invalid="Boolean(confirmarContrasena && !validarConfirmacion)"
+        />
+        <p v-if="confirmarContrasena && !validarConfirmacion" class="field-error">
+          <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+          Las contraseñas no coinciden.
+        </p>
+      </div>
+
+      <button
+        type="submit"
+        class="btn-primary w-full py-3"
+        :disabled="!formularioValido || registrando"
+      >
+        <i v-if="registrando" class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+        {{ registrando ? "Creando cuenta…" : "Crear cuenta" }}
+      </button>
     </form>
+
+    <p class="mt-8 text-sm text-washi-400">
+      ¿Ya tienes una cuenta?
+      <button type="button" class="btn-link ml-1" @click="$emit('volver-login')">
+        Inicia sesión
+      </button>
+    </p>
   </div>
 </template>
 
 <script>
 export default {
   name: "Registro",
+  emits: ["volver-login", "registro-exitoso"],
   data: () => ({
     usuario: "",
     contrasena: "",
     confirmarContrasena: "",
     mostrarContrasena: false,
-    mostrarConfirmarContrasena: false,
     mensaje: "",
-    tipoMensaje: "",
     registrando: false,
     usuarios: [],
   }),
@@ -186,187 +109,63 @@ export default {
     validarUsuario() {
       return this.usuario.length >= 3;
     },
-    validarEmail() {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(this.email);
+    usuarioExiste() {
+      return this.usuarios.some(
+        (u) => u.usuario.toLowerCase() === this.usuario.toLowerCase()
+      );
+    },
+    errorUsuario() {
+      if (!this.usuario) return "";
+      if (!this.validarUsuario) return "Debe tener al menos 3 caracteres.";
+      if (this.usuarioExiste) return "Este nombre de usuario ya está en uso.";
+      return "";
     },
     validarContrasena() {
       return this.contrasena.length >= 6;
     },
     validarConfirmacion() {
-      return (
-        this.contrasena === this.confirmarContrasena &&
-        this.contrasena.length > 0
-      );
-    },
-    usuarioExiste() {
-      return this.usuarios.some(
-        (user) => user.usuario.toLowerCase() === this.usuario.toLowerCase()
-      );
+      return this.contrasena.length > 0 && this.contrasena === this.confirmarContrasena;
     },
     formularioValido() {
       return (
         this.validarUsuario &&
+        !this.usuarioExiste &&
         this.validarContrasena &&
-        this.validarConfirmacion &&
-        !this.usuarioExiste
+        this.validarConfirmacion
       );
-    },
-    mensajeClases() {
-      return {
-        "bg-green-500/20 border border-green-400 text-green-300":
-          this.tipoMensaje === "exito",
-        "bg-red-500/20 border border-red-400 text-red-300":
-          this.tipoMensaje === "error",
-      };
-    },
-    mensajeIcono() {
-      return {
-        "fas fa-check-circle": this.tipoMensaje === "exito",
-        "fas fa-exclamation-circle": this.tipoMensaje === "error",
-      };
     },
   },
   mounted() {
-    this.cargarUsuarios();
+    try {
+      this.usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    } catch {
+      this.usuarios = [];
+    }
   },
   methods: {
-    cargarUsuarios() {
-      try {
-        const usuariosGuardados = localStorage.getItem("usuarios");
-        if (usuariosGuardados) {
-          this.usuarios = JSON.parse(usuariosGuardados);
-        }
-      } catch (error) {
-        console.error("Error al cargar usuarios:", error);
-        this.usuarios = [];
-      }
-    },
-    guardarUsuarios() {
-      try {
-        localStorage.setItem("usuarios", JSON.stringify(this.usuarios));
-      } catch (error) {
-        console.error("Error al guardar usuarios:", error);
-        throw new Error("No se pudo guardar el usuario");
-      }
-    },
     async registrar() {
       if (!this.formularioValido) return;
-
       this.registrando = true;
       this.mensaje = "";
 
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
       try {
-        // Simular delay de red
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        // Verificar nuevamente si el usuario existe (por si cambió durante el registro)
-        if (this.usuarioExiste) {
-          throw new Error("Este nombre de usuario ya está en uso");
-        }
-
-        // Crear nuevo usuario
         const nuevoUsuario = {
-          id: Date.now(), // ID único basado en timestamp
-          usuario: this.usuario.trim(),
-          contrasena: this.contrasena, // En producción, usar hash
+          id: Date.now(),
+          usuario: this.usuario,
+          contrasena: this.contrasena, // Demo local: en producción se guardaría un hash en el servidor
           fechaRegistro: new Date().toISOString(),
           activo: true,
         };
-
-        // Agregar a la lista y guardar
-        this.usuarios.push(nuevoUsuario);
-        this.guardarUsuarios();
-
-        // Mostrar mensaje de éxito
-        this.mostrarMensaje(
-          "¡Cuenta creada exitosamente! Bienvenido.",
-          "exito"
-        );
-
-        // Limpiar formulario
-        this.limpiarFormulario();
-
-        // Emitir evento de registro exitoso después de un delay
-        setTimeout(() => {
-          this.$emit("registro-exitoso", {
-            usuario: nuevoUsuario.usuario,
-          });
-        }, 2000);
-      } catch (error) {
-        console.error("Error en el registro:", error);
-        this.mostrarMensaje(
-          error.message || "Error al crear la cuenta. Inténtalo de nuevo.",
-          "error"
-        );
+        localStorage.setItem("usuarios", JSON.stringify([...this.usuarios, nuevoUsuario]));
+        this.$emit("registro-exitoso", { usuario: nuevoUsuario.usuario });
+      } catch {
+        this.mensaje = "No se pudo crear la cuenta. Inténtalo de nuevo.";
       } finally {
         this.registrando = false;
       }
     },
-    volverLogin() {
-      this.$emit("volver-login");
-    },
-    mostrarMensaje(texto, tipo) {
-      this.mensaje = texto;
-      this.tipoMensaje = tipo;
-
-      // Auto-ocultar mensaje después de 5 segundos
-      setTimeout(() => {
-        this.mensaje = "";
-        this.tipoMensaje = "";
-      }, 5000);
-    },
-    limpiarFormulario() {
-      this.usuario = "";
-      this.contrasena = "";
-      this.confirmarContrasena = "";
-      this.mostrarContrasena = false;
-      this.mostrarConfirmarContrasena = false;
-    },
-    // Método utilitario para obtener todos los usuarios (para debugging)
-    obtenerUsuarios() {
-      return this.usuarios;
-    },
-    // Método para eliminar un usuario (opcional, para administración)
-    eliminarUsuario(usuarioId) {
-      this.usuarios = this.usuarios.filter((user) => user.id !== usuarioId);
-      this.guardarUsuarios();
-    },
   },
 };
 </script>
-
-<style scoped>
-/* Estilos consistentes con el componente de Login */
-.group:hover .peer {
-  border-color: rgba(236, 72, 153, 0.5);
-}
-
-/* Efectos adicionales para feedback visual */
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-}
-
-input.border-red-400:focus {
-  animation: shake 0.5s ease-in-out;
-}
-
-/* Animación para mensajes */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

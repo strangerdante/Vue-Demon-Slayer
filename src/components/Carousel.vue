@@ -1,97 +1,82 @@
 <template>
-  <div class="container">
-    <swiper :pagination="true" :modules="modules" class="mySwiper">
-      <swiper-slide
-        ><img src="../assets/slider-1.png" alt="Slide 1"
-      /></swiper-slide>
-      <swiper-slide
-        ><img src="../assets/slider-2.png" alt="Slide 2"
-      /></swiper-slide>
-      <swiper-slide
-        ><img src="../assets/slider-3.png" alt="Slide 3"
-      /></swiper-slide>
+  <div class="textura-ichimatsu relative flex h-full min-h-screen flex-col items-center justify-center px-12 py-16">
+    <swiper
+      :modules="modules"
+      effect="fade"
+      :fade-effect="{ crossFade: true }"
+      :autoplay="{ delay: 5000, disableOnInteraction: false }"
+      :pagination="{ clickable: true }"
+      :loop="true"
+      class="carrusel w-full max-w-md"
+    >
+      <swiper-slide v-for="slide in slides" :key="slide.src">
+        <img
+          :src="slide.src"
+          :alt="slide.alt"
+          class="mx-auto max-h-[52vh] w-auto object-contain"
+        />
+      </swiper-slide>
     </swiper>
-    <div class="text-center text-white">
-      <h1 class="text-7xl lg:text-8xl font-bold">
-        Demon<span class="text-morado-electrico">Slayer.</span>
-      </h1>
-      <p class="text-md lg:text-xl mt-2">
-        Explora a fondo el universo de Demon Slayer:<br />
-        accede a información detallada de personajes, clanes y tecnicas.<br />
-        ¡Sumérgete en este mundo épico!
+
+    <div class="mt-10 max-w-md text-center">
+      <p class="eyebrow mb-3">Archivo de personajes</p>
+      <h2 class="text-5xl font-extrabold leading-none text-washi-50 xl:text-6xl">
+        Demon <span class="text-fuji-400">Slayer</span>
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-washi-400">
+        Conoce a los cazadores, los Hashira y los demonios del universo de
+        Kimetsu no Yaiba: su historia, su edad y sus frases más memorables.
       </p>
     </div>
   </div>
 </template>
 
 <script>
-// Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
-
-// Import Swiper styles
+import { Autoplay, EffectFade, Pagination } from "swiper";
 import "swiper/css";
+import "swiper/css/effect-fade";
 import "swiper/css/pagination";
 
-// import required modules
-import { Pagination } from "swiper";
+import slide1 from "../assets/slider-1.png";
+import slide2 from "../assets/slider-2.png";
+import slide3 from "../assets/slider-3.png";
 
 export default {
   name: "Carousel",
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
+  components: { Swiper, SwiperSlide },
   setup() {
     return {
-      modules: [Pagination],
+      modules: [Autoplay, EffectFade, Pagination],
+      slides: [
+        { src: slide1, alt: "Ilustración de personaje de Demon Slayer 1" },
+        { src: slide2, alt: "Ilustración de personaje de Demon Slayer 2" },
+        { src: slide3, alt: "Ilustración de personaje de Demon Slayer 3" },
+      ],
     };
   },
 };
 </script>
 
-<style>
-#app {
-  height: 100%;
+<style scoped>
+.carrusel {
+  padding-bottom: 2.5rem;
 }
-html,
-body {
-  position: relative;
-  height: 100%;
-}
-
-body {
-  background: #eee;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  color: #000;
-  margin: 0;
-  padding: 0;
-}
-
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #3e1149;
-
-  /* Center slide text vertically */
+.carrusel :deep(.swiper-slide) {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
-
-/* .swiper-slide img {
-    display: block;
-    width: 100%;
-    height: 100%;
-
-    } */
-
-.swiper-pagination-bullet {
-  background-color: white;
+.carrusel :deep(.swiper-pagination-bullet) {
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  background: #a59e93;
+  opacity: 0.4;
+  transition: opacity 0.2s, background 0.2s;
+}
+.carrusel :deep(.swiper-pagination-bullet-active) {
+  background: #b98ce0;
+  opacity: 1;
 }
 </style>

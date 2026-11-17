@@ -1,39 +1,132 @@
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos base adicionales */
-* {
-  box-sizing: border-box;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-tinta-950 font-sans text-washi-50 antialiased;
+    font-size: 16px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-fuji-400 text-tinta-950;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-fuji-400 ring-offset-2 ring-offset-tinta-950;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-tinta-600;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-washi-400/40;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+@layer components {
+  /* Superficies */
+  .surface {
+    @apply rounded-2xl border border-tinta-700 bg-tinta-900;
+  }
+
+  /* Formularios */
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-washi-200;
+  }
+  .field-input {
+    @apply w-full rounded-lg border border-tinta-600 bg-tinta-800 px-3.5 py-2.5 text-washi-50
+      placeholder:text-washi-400/60 transition-colors duration-150
+      hover:border-washi-400/40
+      focus:border-fuji-400 focus:outline-none focus:ring-2 focus:ring-fuji-400/30;
+  }
+  .field-input.is-invalid {
+    @apply border-beni-400 focus:border-beni-400 focus:ring-beni-400/30;
+  }
+  .field-error {
+    @apply mt-1.5 flex items-center gap-1.5 text-sm text-beni-400;
+  }
+
+  /* Botones */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold
+      transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-fuji-400 text-tinta-950 hover:bg-fuji-300;
+  }
+  .btn-secondary {
+    @apply btn border border-tinta-600 bg-tinta-800 text-washi-50 hover:border-washi-400/40 hover:bg-tinta-700;
+  }
+  .btn-link {
+    @apply rounded font-semibold text-fuji-300 underline-offset-4 hover:underline;
+  }
+  .btn-icon {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-lg text-washi-200
+      transition-colors duration-150 hover:bg-tinta-700 hover:text-washi-50;
+  }
+
+  /* Avisos */
+  .alert {
+    @apply flex items-start gap-3 rounded-lg border px-4 py-3 text-sm;
+  }
+  .alert-exito {
+    @apply alert border-jade-500/40 bg-jade-500/10 text-jade-400;
+  }
+  .alert-error {
+    @apply alert border-beni-400/40 bg-beni-500/10 text-beni-400;
+  }
+  .alert-info {
+    @apply alert border-fuji-400/30 bg-fuji-400/10 text-fuji-300;
+  }
+
+  /* Patrón ichimatsu (ajedrezado del haori), muy sutil */
+  .textura-ichimatsu {
+    background-image: repeating-conic-gradient(rgb(255 255 255 / 0.022) 0 25%, transparent 0 50%);
+    background-size: 56px 56px;
+  }
+
+  /* Etiqueta pequeña en mayúsculas para secciones */
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.14em] text-washi-400;
+  }
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* Transiciones compartidas */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(4px);
 }
 
-/* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(236, 72, 153, 0.6);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(236, 72, 153, 0.8);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
