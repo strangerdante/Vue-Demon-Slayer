@@ -1,7 +1,7 @@
 <template>
   <div class="grid min-h-screen lg:grid-cols-2">
     <Login />
-    <aside class="hidden border-l border-tinta-700 bg-tinta-900 lg:block">
+    <aside class="hidden lg:block">
       <Carousel />
     </aside>
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="textura-ichimatsu relative flex h-full min-h-screen flex-col items-center justify-center px-12 py-16">
+  <div class="ichimatsu ichimatsu-gris relative flex h-full min-h-screen flex-col items-center justify-center px-12 py-16">
     <swiper
       :modules="modules"
       effect="fade"

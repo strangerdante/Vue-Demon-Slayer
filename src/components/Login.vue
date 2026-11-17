@@ -1,5 +1,5 @@
 <template>
-  <main class="textura-ichimatsu flex min-h-screen flex-col bg-tinta-950 px-6 py-8 sm:px-10">
+  <main class="tema-tanjiro ichimatsu ichimatsu-verde flex min-h-screen flex-col px-6 py-8 sm:px-10">
     <!-- Marca -->
     <header class="flex items-center gap-2.5">
       <img src="../assets/logo.png" alt="" class="h-8 w-8" />
@@ -7,7 +7,9 @@
     </header>
 
     <div class="flex flex-1 items-center justify-center py-10">
-      <div class="w-full max-w-sm">
+      <div
+        class="w-full max-w-md rounded-2xl border border-white/10 bg-[#060807]/85 p-7 shadow-2xl shadow-black/60 backdrop-blur-md sm:p-9"
+      >
         <Transition name="fade" mode="out-in">
           <!-- Login -->
           <section v-if="!mostrarRegistro" key="login">

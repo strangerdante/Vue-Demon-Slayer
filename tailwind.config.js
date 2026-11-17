@@ -27,6 +27,14 @@ export default {
         beni: { 400: "#e0525a", 500: "#c8323b" }, // demonios / errores
         jade: { 400: "#4fb393", 500: "#3f9b7f" }, // humanos / éxito
         kin: { 400: "#e2b866", 500: "#d9a84e" }, // hashira
+        // Verde del haori de Tanjiro (pantalla de inicio de sesión)
+        tanjiro: {
+          300: "#6fd6b0",
+          400: "#2fb487",
+          500: "#1e9470",
+          700: "#11523f",
+          900: "#0a2e24",
+        },
       },
       fontFamily: {
         display: ['"Shippori Mincho B1"', "Georgia", "serif"],

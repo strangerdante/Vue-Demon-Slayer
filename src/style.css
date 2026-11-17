@@ -97,10 +97,41 @@
     @apply alert border-fuji-400/30 bg-fuji-400/10 text-fuji-300;
   }
 
-  /* Patrón ichimatsu (ajedrezado del haori), muy sutil */
-  .textura-ichimatsu {
-    background-image: repeating-conic-gradient(rgb(255 255 255 / 0.022) 0 25%, transparent 0 50%);
-    background-size: 56px 56px;
+  /*
+   * Patrón ichimatsu (ajedrezado del haori), compartido por las dos mitades del login.
+   * Fijado a la ventana y centrado en ella (50%, sin contar la barra de desplazamiento):
+   * los cuadros de ambas mitades forman una sola cuadrícula y la división cae
+   * justo en el borde entre dos cuadros.
+   */
+  .ichimatsu {
+    background-color: #070908;
+    background-image: repeating-conic-gradient(var(--cuadro) 0 25%, #070908 0 50%);
+    background-size: 72px 72px;
+    background-position: 50% 0;
+    background-attachment: fixed;
+  }
+  .ichimatsu-verde {
+    --cuadro: theme("colors.tanjiro.700");
+  }
+  .ichimatsu-gris {
+    --cuadro: #1f1f23;
+  }
+
+  /* Tema Tanjiro: acentos verdes (el fondo lo pone .ichimatsu-verde) */
+  .tema-tanjiro .btn-primary {
+    @apply bg-tanjiro-400 text-tinta-950 hover:bg-tanjiro-300;
+  }
+  .tema-tanjiro .btn-link {
+    @apply text-tanjiro-300;
+  }
+  .tema-tanjiro .field-input:not(.is-invalid) {
+    @apply border-white/10 bg-black/50 focus:border-tanjiro-400 focus:ring-tanjiro-400/30;
+  }
+  .tema-tanjiro .alert-info {
+    @apply border-tanjiro-400/30 bg-tanjiro-400/10 text-tanjiro-300;
+  }
+  .tema-tanjiro :focus-visible {
+    @apply ring-tanjiro-400 ring-offset-black;
   }
 
   /* Etiqueta pequeña en mayúsculas para secciones */
