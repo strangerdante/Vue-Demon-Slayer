@@ -39,9 +39,22 @@
           <div class="flex min-h-0 flex-1 flex-col">
             <div class="flex items-center justify-between border-b border-tinta-700 px-6 py-3">
               <p class="eyebrow">Ficha del personaje</p>
-              <button type="button" class="btn-icon -mr-2" aria-label="Cerrar" @click="$emit('cerrar')">
-                <i class="fas fa-xmark text-lg" aria-hidden="true"></i>
-              </button>
+              <div class="-mr-2 flex items-center gap-1">
+                <button
+                  type="button"
+                  class="btn-icon"
+                  :class="{ 'text-beni-400 hover:text-beni-400': favorito }"
+                  :aria-pressed="favorito"
+                  :aria-label="favorito ? 'Quitar de favoritos' : 'Añadir a favoritos'"
+                  :title="favorito ? 'Quitar de favoritos' : 'Añadir a favoritos'"
+                  @click="$emit('alternar-favorito')"
+                >
+                  <i :class="favorito ? 'fas fa-heart' : 'fa-regular fa-heart'" class="text-lg" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="btn-icon" aria-label="Cerrar" @click="$emit('cerrar')">
+                  <i class="fas fa-xmark text-lg" aria-hidden="true"></i>
+                </button>
+              </div>
             </div>
 
             <div class="flex-1 overflow-y-auto px-6 py-6">
@@ -137,8 +150,9 @@ export default {
     personaje: { type: Object, default: null },
     anterior: { type: Object, default: null },
     siguiente: { type: Object, default: null },
+    favorito: { type: Boolean, default: false },
   },
-  emits: ["cerrar", "navegar"],
+  emits: ["cerrar", "navegar", "alternar-favorito"],
   data: () => ({ focoPrevio: null }),
   computed: {
     afiliacion() {

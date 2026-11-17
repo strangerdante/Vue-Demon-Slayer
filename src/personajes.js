@@ -8,11 +8,17 @@ export const FILTROS = [
   { id: "humano", etiqueta: "Humanos", punto: "bg-jade-400", prueba: (p) => p.race === "Humano" },
   { id: "demonio", etiqueta: "Demonios", punto: "bg-beni-400", prueba: (p) => p.race === "Demonio" },
   { id: "hashira", etiqueta: "Hashira", punto: "bg-kin-400", prueba: (p) => p.affiliation_id === 2 },
+  // "favoritos" depende del usuario: recibe la lista de ids favoritos como segundo argumento
+  { id: "favoritos", etiqueta: "Favoritos", icono: "fas fa-heart text-beni-400", prueba: (p, favoritos) => favoritos.includes(p.id) },
 ];
 
-export const conteoPorFiltro = Object.fromEntries(
-  FILTROS.map((f) => [f.id, personajes.filter(f.prueba).length])
-);
+export const IDS_FILTROS = FILTROS.map((f) => f.id);
+
+export function contarPorFiltro(favoritos = []) {
+  return Object.fromEntries(
+    FILTROS.map((f) => [f.id, personajes.filter((p) => f.prueba(p, favoritos)).length])
+  );
+}
 
 // Nombres de las afiliaciones según affiliation_id de la API
 export const AFILIACIONES = {

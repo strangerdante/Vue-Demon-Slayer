@@ -54,6 +54,19 @@
             </div>
 
             <div class="p-1.5">
+              <router-link
+                :to="{ name: 'personajes', query: { filtro: 'favoritos' } }"
+                role="menuitem"
+                class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-washi-200 transition-colors hover:bg-tinta-800 hover:text-washi-50 focus-visible:bg-tinta-800 focus-visible:ring-0"
+                @click="cerrar()"
+              >
+                <i class="fas fa-heart w-4 text-beni-400" aria-hidden="true"></i>
+                Mis favoritos
+                <span class="ml-auto rounded-full bg-tinta-700 px-2 text-xs tabular-nums text-washi-200">
+                  {{ favoritos.ids.length }}
+                </span>
+              </router-link>
+              <div class="my-1 h-px bg-tinta-700" role="separator"></div>
               <button
                 type="button"
                 role="menuitem"
@@ -73,6 +86,7 @@
 
 <script>
 import { cerrarSesion, obtenerSesion } from "../auth";
+import { usarFavoritos } from "../favoritos";
 
 export default {
   name: "Navbar",
@@ -85,7 +99,7 @@ export default {
     } catch {
       registro = null;
     }
-    return { abierto: false, usuario, registro };
+    return { abierto: false, usuario, registro, favoritos: usarFavoritos() };
   },
   computed: {
     inicial() {

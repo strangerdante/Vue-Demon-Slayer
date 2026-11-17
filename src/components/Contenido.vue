@@ -65,7 +65,8 @@
             :aria-pressed="filtroActual === filtro.id"
             @click="cambiarFiltro(filtro.id)"
           >
-            <span class="h-2 w-2 rounded-full" :class="filtro.punto" aria-hidden="true"></span>
+            <i v-if="filtro.icono" :class="filtro.icono" class="text-xs" aria-hidden="true"></i>
+            <span v-else class="h-2 w-2 rounded-full" :class="filtro.punto" aria-hidden="true"></span>
             {{ filtro.etiqueta }}
             <span
               class="tabular-nums"
@@ -104,6 +105,17 @@
               :style="{ backgroundColor: personaje.color }"
               aria-hidden="true"
             ></span>
+            <!-- Favorito: por encima del enlace estirado (z-10) -->
+            <button
+              type="button"
+              class="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-tinta-950/60 backdrop-blur transition duration-150 hover:scale-110 hover:bg-tinta-950/80"
+              :class="esFavorito(personaje.id) ? 'text-beni-400' : 'text-washi-200 hover:text-washi-50'"
+              :aria-pressed="esFavorito(personaje.id)"
+              :aria-label="`${esFavorito(personaje.id) ? 'Quitar de' : 'Añadir a'} favoritos: ${personaje.name}`"
+              @click="alternarFavorito(personaje.id)"
+            >
+              <i :class="esFavorito(personaje.id) ? 'fas fa-heart' : 'fa-regular fa-heart'" aria-hidden="true"></i>
+            </button>
           </div>
 
           <div class="flex flex-1 flex-col p-5">
@@ -111,7 +123,7 @@
               <h2 class="text-xl font-bold leading-snug text-washi-50">
                 <!-- Enlace "estirado": toda la tarjeta es clicable -->
                 <router-link
-                  :to="{ name: 'personajes', params: { id: personaje.id } }"
+                  :to="{ name: 'personajes', params: { id: personaje.id }, query: $route.query }"
                   class="rounded outline-none after:absolute after:inset-0 after:content-[''] focus-visible:ring-0"
                 >
                   {{ personaje.name }}
@@ -218,11 +230,17 @@
 
       <!-- Estado vacío -->
       <div v-if="personajesFiltrados.length === 0" class="py-20 text-center">
-        <i class="fas fa-magnifying-glass mb-4 text-3xl text-washi-400" aria-hidden="true"></i>
-        <h2 class="text-2xl font-bold text-washi-50">No se encontraron personajes</h2>
+        <i
+          :class="sinFavoritos ? 'fa-regular fa-heart' : 'fas fa-magnifying-glass'"
+          class="mb-4 text-3xl text-washi-400"
+          aria-hidden="true"
+        ></i>
+        <h2 class="text-2xl font-bold text-washi-50">
+          {{ sinFavoritos ? "Aún no tienes favoritos" : "No se encontraron personajes" }}
+        </h2>
         <p class="mt-2 text-washi-400">{{ mensajeVacio }}</p>
         <button type="button" class="btn-secondary mt-6" @click="reiniciar">
-          Ver todos los personajes
+          {{ sinFavoritos ? "Explorar personajes" : "Ver todos los personajes" }}
         </button>
       </div>
     </div>
@@ -232,6 +250,8 @@
       :personaje="personajeSeleccionado"
       :anterior="vecinos.anterior"
       :siguiente="vecinos.siguiente"
+      :favorito="Boolean(personajeSeleccionado && esFavorito(personajeSeleccionado.id))"
+      @alternar-favorito="alternarFavorito(personajeSeleccionado.id)"
       @cerrar="cerrarDetalle"
       @navegar="abrirDetalle"
     />
@@ -240,7 +260,11 @@
 
 <script>
 import PersonajeDetalle from "./PersonajeDetalle.vue";
-import { FILTROS, conteoPorFiltro, normalizar, personajes } from "../personajes";
+import { FILTROS, IDS_FILTROS, contarPorFiltro, normalizar, personajes } from "../personajes";
+import { alternarFavorito, esFavorito, usarFavoritos } from "../favoritos";
+
+// Valores por defecto: no se escriben en la URL para mantenerla limpia
+const POR_DEFECTO = { filtro: "todos", q: "", pagina: "1" };
 
 export default {
   name: "Contenido",
@@ -249,14 +273,29 @@ export default {
     return {
       personajes,
       filtros: FILTROS,
-      conteos: conteoPorFiltro,
-      paginaActual: 1,
+      favoritos: usarFavoritos(),
       personajesPorPagina: 6,
-      filtroActual: "todos",
-      busqueda: "",
+      // La búsqueda vive en local mientras se escribe y pasa a la URL con un pequeño retardo
+      busqueda: String(this.$route.query.q || ""),
+      temporizadorBusqueda: null,
     };
   },
   computed: {
+    // Estado leído de la URL: ?filtro=hashira&q=ren&pagina=2
+    filtroActual() {
+      const filtro = this.$route.query.filtro;
+      return IDS_FILTROS.includes(filtro) ? filtro : POR_DEFECTO.filtro;
+    },
+    paginaActual() {
+      const pagina = parseInt(this.$route.query.pagina, 10) || 1;
+      return Math.min(Math.max(pagina, 1), Math.max(this.totalPaginas, 1));
+    },
+    conteos() {
+      return contarPorFiltro(this.favoritos.ids);
+    },
+    sinFavoritos() {
+      return this.filtroActual === "favoritos" && this.favoritos.ids.length === 0;
+    },
     etiquetaFiltro() {
       return FILTROS.find((f) => f.id === this.filtroActual)?.etiqueta;
     },
@@ -267,7 +306,7 @@ export default {
       const filtro = FILTROS.find((f) => f.id === this.filtroActual) || FILTROS[0];
       const q = this.busquedaNormalizada;
       return this.personajes.filter(
-        (p) => filtro.prueba(p) && (!q || normalizar(p.name).includes(q))
+        (p) => filtro.prueba(p, this.favoritos.ids) && (!q || normalizar(p.name).includes(q))
       );
     },
     totalPaginas() {
@@ -280,6 +319,7 @@ export default {
       return Math.min(this.paginaActual * this.personajesPorPagina, this.personajesFiltrados.length);
     },
     mensajeVacio() {
+      if (this.sinFavoritos) return "Toca el corazón de cualquier personaje para guardarlo aquí.";
       if (!this.busquedaNormalizada) return "Prueba con otro filtro.";
       const en = this.filtroActual !== "todos" ? ` en ${this.etiquetaFiltro}` : "";
       return `Ningún personaje coincide con “${this.busqueda.trim()}”${en}.`;
@@ -318,8 +358,20 @@ export default {
     },
   },
   watch: {
-    busqueda() {
-      this.paginaActual = 1;
+    busqueda(valor) {
+      clearTimeout(this.temporizadorBusqueda);
+      this.temporizadorBusqueda = setTimeout(() => {
+        if (valor.trim() !== String(this.$route.query.q || "")) {
+          this.actualizarUrl({ q: valor.trim(), pagina: null }, { reemplazar: true });
+        }
+      }, 250);
+    },
+    // Atrás/adelante del navegador: traer la búsqueda de la URL al campo
+    "$route.query.q"(q) {
+      const valor = String(q || "");
+      if (normalizar(valor) !== this.busquedaNormalizada) {
+        this.busqueda = valor;
+      }
     },
   },
   mounted() {
@@ -327,24 +379,37 @@ export default {
   },
   beforeUnmount() {
     document.removeEventListener("keydown", this.atajoBusqueda);
+    clearTimeout(this.temporizadorBusqueda);
   },
   methods: {
+    esFavorito,
+    alternarFavorito,
+    // Fusiona cambios en la query actual, omite los valores por defecto y conserva la ficha abierta
+    actualizarUrl(cambios, { reemplazar = false } = {}) {
+      const query = { ...this.$route.query, ...cambios };
+      for (const [clave, valor] of Object.entries(query)) {
+        if (valor == null || valor === "" || String(valor) === POR_DEFECTO[clave]) delete query[clave];
+      }
+      const destino = { name: "personajes", params: this.$route.params, query };
+      return reemplazar ? this.$router.replace(destino) : this.$router.push(destino);
+    },
     cambiarPagina(pagina) {
       if (pagina < 1 || pagina > this.totalPaginas || pagina === this.paginaActual) return;
-      this.paginaActual = pagina;
+      this.actualizarUrl({ pagina });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     cambiarFiltro(filtro) {
-      this.filtroActual = filtro;
-      this.paginaActual = 1;
+      if (filtro === this.filtroActual) return;
+      this.actualizarUrl({ filtro, pagina: null });
     },
     limpiarBusqueda() {
       this.busqueda = "";
       this.$refs.buscador?.focus();
     },
     reiniciar() {
+      clearTimeout(this.temporizadorBusqueda);
       this.busqueda = "";
-      this.cambiarFiltro("todos");
+      this.actualizarUrl({ filtro: null, q: null, pagina: null });
     },
     atajoBusqueda(e) {
       // "/" enfoca el buscador (si no se está escribiendo ya en un campo)
@@ -355,13 +420,13 @@ export default {
       }
     },
     abrirDetalle(personaje) {
-      this.$router.replace({ name: "personajes", params: { id: personaje.id } });
+      this.$router.replace({ name: "personajes", params: { id: personaje.id }, query: this.$route.query });
     },
     cerrarDetalle() {
       // Si llegamos desde la lista, volver atrás; si se abrió el enlace directo, reemplazar
       const atras = window.history.state?.back;
       if (atras && atras.startsWith("/personajes")) this.$router.back();
-      else this.$router.replace({ name: "personajes" });
+      else this.$router.replace({ name: "personajes", query: this.$route.query });
     },
     onImageError(event) {
       event.target.onerror = null;
