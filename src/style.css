@@ -125,7 +125,7 @@
     @apply text-tanjiro-300;
   }
   .tema-tanjiro .field-input:not(.is-invalid) {
-    @apply border-white/10 bg-black/50 focus:border-tanjiro-400 focus:ring-tanjiro-400/30;
+    @apply border-white/10 bg-[#111513] focus:border-tanjiro-400 focus:ring-tanjiro-400/30;
   }
   .tema-tanjiro .alert-info {
     @apply border-tanjiro-400/30 bg-tanjiro-400/10 text-tanjiro-300;

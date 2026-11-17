@@ -1,14 +1,16 @@
 <template>
   <main class="tema-tanjiro ichimatsu ichimatsu-verde flex min-h-screen flex-col px-6 py-8 sm:px-10">
     <!-- Marca -->
-    <header class="flex items-center gap-2.5">
+    <header
+      class="flex items-center gap-2.5 self-start rounded-xl border border-white/10 bg-[#080a09] py-1.5 pl-1.5 pr-3.5"
+    >
       <img src="../assets/logo.png" alt="" class="h-8 w-8" />
       <span class="font-display text-lg font-bold text-washi-50">Demon Slayer</span>
     </header>
 
     <div class="flex flex-1 items-center justify-center py-10">
       <div
-        class="w-full max-w-md rounded-2xl border border-white/10 bg-[#060807]/85 p-7 shadow-2xl shadow-black/60 backdrop-blur-md sm:p-9"
+        class="w-full max-w-md rounded-2xl border border-white/10 bg-[#080a09] p-7 shadow-2xl shadow-black/60 sm:p-9"
       >
         <Transition name="fade" mode="out-in">
           <!-- Login -->
@@ -110,7 +112,9 @@
       </div>
     </div>
 
-    <footer class="text-xs text-washi-400">
+    <footer
+      class="self-start rounded-lg border border-white/10 bg-[#080a09] px-3 py-1.5 text-xs text-washi-400"
+    >
       © {{ anio }} Jamel Pimienta. Proyecto de fans sin fines comerciales.
     </footer>
 
